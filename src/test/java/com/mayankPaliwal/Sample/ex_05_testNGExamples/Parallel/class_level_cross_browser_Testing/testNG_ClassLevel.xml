@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="parallel-class" parallel="classes" thread-count="2">
+    <test
+            name="class level parallelization"
+            verbose="2"
+            preserve-order="true">
+        <classes>
+            <class name="com.mayankPaliwal.Sample.ex_05_testNGExamples.Parallel.class_level_cross_browser_Testing.ChromeTest"></class>
+
+            <class name="com.mayankPaliwal.Sample.ex_05_testNGExamples.Parallel.class_level_cross_browser_Testing.Firefox"></class>
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="parallel-Methods" parallel="methods" thread-count="2">
+    <test
+            name="method level parallel"
+            verbose="2"
+            preserve-order="true">
+        <classes>
+            <class name="com.mayankPaliwal.Sample.ex_05_testNGExamples.Parallel.method_level.LoginTest">
+            </class>
+        </classes>
+    </test>
+</suite>

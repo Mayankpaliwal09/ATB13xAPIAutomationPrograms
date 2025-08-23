@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test name="ATB13xAPIAutomationPrograms" verbose="2" preserve-order="true">
+
+
+
+        <groups>
+            <run>
+                <include name="sanity"></include>
+                <include name="smoke"></include>
+                <exclude name="reg"></exclude>
+            </run>
+        </groups>
+
+
+
+        <classes>
+            <class name="com.mayankPaliwal.Sample.ex_05_testNGExamples.APITesting017_TestNG_Grouping">
+            </class>
+        </classes>
+    </test>
+</suite>
