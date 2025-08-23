@@ -48,6 +48,6 @@ public class APITesting_Lab06_TestCase {
                 .when().log().all()
                 .get()
                 .then()
-                .log().all().statusCode(200);
+                .log().all().statusCode(404);
     }
 }
