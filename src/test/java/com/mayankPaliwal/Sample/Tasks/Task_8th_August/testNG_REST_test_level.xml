@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="RESTFULL parallel-tests" parallel="tests" thread-count="2">
+
+    <test name="TEST 1 PUT">
+        <classes>
+            <class name="com.mayankPaliwal.Sample.Tasks.Task_8th_August.RestFul_Booker_e2e_PUT">
+            </class>
+        </classes>
+    </test>
+
+    <test name="TEST 2 PATCH">
+        <classes>
+            <class name="com.mayankPaliwal.Sample.Tasks.Task_8th_August.RestFull_Booker_CRUD_PATCH">
+            </class>
+        </classes>
+    </test>
+</suite>

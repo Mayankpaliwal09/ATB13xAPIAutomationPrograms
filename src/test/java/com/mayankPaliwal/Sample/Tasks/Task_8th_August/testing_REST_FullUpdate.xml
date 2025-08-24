@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test
+            name="RESTFULL - FullUpdate"
+            verbose="2"
+            preserve-order="true">
+        <classes>
+            <class name="com.mayankPaliwal.Sample.Tasks.Task_8th_August.RestFul_Booker_e2e_PUT">
+            </class>
+        </classes>
+    </test>
+</suite>
