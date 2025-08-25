@@ -45,5 +45,12 @@
       <version>2.15.2</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-guava</artifactId>
+      <version>3.27.3</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>
