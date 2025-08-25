@@ -77,8 +77,8 @@ public class APITesting027_RestAssured_TestNG_AssertJ_Assertions {
         // another way of extraction
 
         JsonPath jsonpath = new JsonPath(response.asString());
-        String bookingid = jsonpath.getString("bookingid");
-        System.out.println(bookingid);
+        String bookingid2 = jsonpath.getString("bookingid");
+        System.out.println(bookingid2);
 
 
         // TestNG - Extract the details of the firstname, bookingId, lastname from Response.
