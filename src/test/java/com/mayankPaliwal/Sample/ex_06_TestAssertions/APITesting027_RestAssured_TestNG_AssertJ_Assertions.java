@@ -83,6 +83,7 @@ public class APITesting027_RestAssured_TestNG_AssertJ_Assertions {
         assertThat(jp.getString("booking.lastname")).isEqualTo("Paliwal");
         assertThat(jp.getInt("booking.totalprice")).isEqualTo(1111);
         assertThat(jp.getBoolean("booking.depositpaid")).isTrue();
+        assertThat(jp.getBoolean("booking.depositpaid")).isTrue();
 
 
         // TestNG - Extract the details of the firstname, bookingId, lastname from Response.
@@ -98,6 +99,7 @@ public class APITesting027_RestAssured_TestNG_AssertJ_Assertions {
         if(!firstName.contains("Mayank")){
             Assert.fail("FAIL ho gaya test");
         }
+
 
 
 
