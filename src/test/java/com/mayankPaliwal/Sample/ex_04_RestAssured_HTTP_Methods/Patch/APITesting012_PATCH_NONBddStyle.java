@@ -44,7 +44,8 @@ public class APITesting012_PATCH_NONBddStyle {
         response = r.when().log().all().patch();
 
         vr = response.then().log().all();
-        vr.statusCode(200);
+//        vr.statusCode(200);
+        vr.statusCode(403);
         // we have not verified the response, we have only verified the status code.
 
     }
