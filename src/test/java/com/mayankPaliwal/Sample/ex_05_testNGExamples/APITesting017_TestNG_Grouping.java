@@ -26,6 +26,6 @@ public class APITesting017_TestNG_Grouping {
     @Test(groups = {"reg","smoke"})
     public void test_SmokeRun(){
         System.out.println("This is Smoke Testing");
-        Assert.assertTrue(true);
+        Assert.assertTrue(false);
     }
 }
