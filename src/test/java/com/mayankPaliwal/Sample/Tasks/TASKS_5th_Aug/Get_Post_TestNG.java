@@ -1,23 +1,34 @@
-package com.mayankPaliwal.Sample.TASKS_5th_Aug;
+package com.mayankPaliwal.Sample.Tasks.TASKS_5th_Aug;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class NBP_using_MAIN {
-    public NBP_using_MAIN get(){
+public class Get_Post_TestNG {
+
+
+
+    // GET ping request
+    @Test
+    public void ping(){
+
+
         RestAssured.given()
                 .baseUri("https://restful-booker.herokuapp.com")
                 .basePath("/ping")
                 .when()
                 .get()
                 .then().log().all().statusCode(201);
-
-        return this;
     }
 
-    public NBP_using_MAIN post(){
+
+    // Create Booking
+    @Test
+    public void createBooking(){
+
         Map<String,String> bookingDates = new HashMap<>();
         bookingDates.put( "checkin","2025-08-25");
         bookingDates.put( "checkout","2025-08-25");
@@ -37,14 +48,27 @@ public class NBP_using_MAIN {
                 .body(booking)
                 .when().log().all().post()
                 .then().log().all().statusCode(200);
-
-        return this;
     }
-    public static void main(String[] args) {
 
-        NBP_using_MAIN nbp = new NBP_using_MAIN();
-        nbp.get();
-        nbp.post();
+    // GET booking
+    @Test
+    public void getBooking(){
+        int bookingId = 2666;
+       String response =  RestAssured.given()
+                .baseUri("https://restful-booker.herokuapp.com")
+                .basePath("/booking/{id}")
+               .pathParam("id", bookingId)
+
+               .accept(ContentType.JSON)
+                .when().log().all().get()
+                .then().log().all().statusCode(418)
+               .extract()
+               .asString();
+
+        System.out.println("response "+response);
+
+
 
     }
+
 }
