@@ -1,5 +1,6 @@
 package com.mayankPaliwal.Sample.Tasks.Task_11th_AUG;
 
+import groovy.util.Eval;
 import io.qameta.allure.Description;
 import io.qameta.allure.Owner;
 import io.restassured.RestAssured;
@@ -26,6 +27,7 @@ public class All_Assertions_CRUD {
     ValidatableResponse vr;
     String uri = "https://restful-booker.herokuapp.com";
     String token ;
+    Integer bookingid;
 
 
     @Test(priority = 1)
@@ -65,7 +67,7 @@ public class All_Assertions_CRUD {
         // there are 2 ways to extract
 
        // Concept #1 of Extraction normal way
-       Integer bookingid = response.then().extract().path("bookingid");
+        bookingid = response.then().extract().path("bookingid");
        String firstname = response.then().extract().path("booking.firstname");
        String lastname = response.then().extract().path("booking.lastname");
 
@@ -78,6 +80,9 @@ public class All_Assertions_CRUD {
         System.out.println(bookingid1);
         System.out.println(firstname1);
         System.out.println(lastname1);
+
+        bookingid = jp.getInt("bookingid");
+        System.out.println(bookingid);
 
 
         // TESTNG ASSERTIONS
@@ -127,7 +132,207 @@ public class All_Assertions_CRUD {
         vr = response.then().log().all();
         vr.statusCode(200);
 
+        vr.body("token",Matchers.notNullValue());
+
         token = response.then().extract().path("token");
+
         System.out.println(token);
     }
+
+
+    @Test(priority = 3 , dependsOnMethods = {"CreateBooking","Token_Create"})
+    @Owner("Mayank Paliwal")
+    @Description("TC#3 Get Booking by id")
+    public void get_Booking(){
+
+
+        r = RestAssured.given()
+                .baseUri(uri)
+                .basePath("/booking/"+bookingid)
+                .contentType(ContentType.JSON);
+
+        response = r.when().log().all().get();
+        vr = response.then().log().all();
+
+        // hamcrest or restassured assertions
+        vr.statusCode(200);
+        vr.body("firstname",Matchers.equalTo("mayank"));
+        vr.body("lastname",Matchers.equalTo("paliwal"));
+        vr.body("depositpaid",Matchers.equalTo(true));
+        vr.body("totalprice",Matchers.notNullValue());
+
+
+        //  path extraction assertions of TestNg assertion
+
+        // extraction 1
+        String firstname = response.then().extract().path("firstname");
+        String lastname = response.then().extract().path("lastname");
+        Boolean depositpaid = response.then().extract().path("depositpaid");
+        Integer totalprice = response.then().extract().path("totalprice");
+        Assert.assertEquals(firstname,"mayank");
+        Assert.assertEquals(lastname,"paliwal");
+        Assert.assertEquals(depositpaid,true);
+        Assert.assertNotNull(totalprice);
+        Assert.assertNotNull(firstname);
+
+
+        // extraction2  using jsonPath
+        JsonPath jp = new JsonPath(response.asString());
+        String firstname1 = jp.getString("firstname");
+        String lastname1 = jp.getString("lastname");
+        String totalprice1 = jp.getString("totalprice");
+        String depositpaid1 = jp.getString("depositpaid");
+
+//        System.out.println(response.asString());
+//        System.out.println(jp.getString("firstname"));
+//        System.out.println(firstname1);
+
+        // assertion
+        Assert.assertEquals(firstname1,"mayank");
+        Assert.assertEquals(lastname1,"paliwal");
+        Assert.assertEquals(depositpaid,true);
+        Assert.assertNotNull(totalprice1);
+        Assert.assertNotNull(firstname1);
+
+
+        // AssertJ ( 3rd Party library to Assertions)
+
+       assertThat(firstname1).isNotNull().isNotEmpty();
+        assertThat(jp.getString("firstname").contains("m"));
+        assertThat(jp.getString("firstname")).isNotEmpty();
+        assertThat(jp.getString("firstname")).isEqualTo("mayank");
+        assertThat(jp.getString("lastname")).isEqualTo("paliwal");
+        assertThat(jp.getBoolean("depositpaid")).isTrue();
+
+    }
+
+
+
+//  UPDATE - PUT - FULL UPDATE
+
+    @Test(priority = 4 , dependsOnMethods = {"CreateBooking","Token_Create"})
+    @Owner("Mayank Paliwal")
+    @Description("TC#4 Update Booking by id this is full update using put")
+    public void update(){
+
+        String update_Payload =  "{\n" +
+                "    \"firstname\" : \"hunny\",\n" +
+                "    \"lastname\" : \"paliwal\",\n" +
+                "    \"totalprice\" : 100,\n" +
+                "    \"depositpaid\" : true,\n" +
+                "    \"bookingdates\" : {\n" +
+                "        \"checkin\" : \"2018-01-19\",\n" +
+                "        \"checkout\" : \"2019-01-11\"\n" +
+                "    },\n" +
+                "    \"additionalneeds\" : \"lunch\"\n" +
+                "}";
+
+
+        r = RestAssured.given()
+                .baseUri(uri)
+                .basePath("/booking/"+bookingid)
+                .contentType(ContentType.JSON)
+                .cookie("token",token)
+                .body(update_Payload);
+
+        response = r.when().log().all().put();
+
+        vr = response.then().log().all();
+        vr.statusCode(200);
+
+
+        vr.body("firstname",Matchers.notNullValue());
+
+        JsonPath jp = new JsonPath(response.asString());
+        String firstname = jp.getString("firstname");
+        String lastname = jp.getString("lastname");
+        Integer totalprice = jp.getInt("totalprice");
+
+        Assert.assertEquals(firstname,"hunny");
+        Assert.assertEquals(lastname,"paliwal");
+        Assert.assertNotNull(totalprice);
+
+
+        assertThat(jp.getString("firstname")).isEqualTo("hunny").isNotNull().isNotEmpty();
+        assertThat(jp.getString("lastname")).isEqualTo("paliwal").isNotNull().isNotEmpty();
+        assertThat(jp.getInt("totalprice")).isNotNull();
+
+    }
+
+
+
+    // PARTIAL UPDATE - PATCH
+
+    @Test(priority = 5, dependsOnMethods = {"CreateBooking","Token_Create"})
+    @Owner("Mayank Paliwal")
+    @Description("TC#5 Partial Update Booking by id ")
+    public void partial_update(){
+        String Payload =  "{\n" +
+                "    \"firstname\" : \"mankuuuuu\",\n" +
+                "    \"lastname\" : \"paliwal\"\n" +
+                "}";
+
+
+        r = RestAssured.given()
+                .baseUri(uri)
+                .basePath("/booking/"+bookingid)
+                .contentType(ContentType.JSON)
+                .cookie("token",token)
+                .body(Payload);
+
+        response = r.when().log().all().patch();
+
+        vr = response.then().log().all();
+        vr.statusCode(200);
+
+        JsonPath jp = new JsonPath(response.asString());
+        String firstname = jp.getString("firstname");
+        String lastname = jp.getString("lastname");
+
+        assertThat(firstname).isNotEmpty().isEqualTo("mankuuuuu");
+        Integer totalprice = jp.getInt("totalprice");
+
+        Assert.assertEquals(firstname,"mankuuuuu");
+        Assert.assertEquals(lastname,"paliwal");
+        Assert.assertNotNull(totalprice);
+
+
+        assertThat(jp.getString("firstname")).isEqualTo("mankuuuuu").isNotNull().isNotEmpty();
+        assertThat(jp.getString("lastname")).isEqualTo("paliwal").isNotNull().isNotEmpty();
+        assertThat(jp.getInt("totalprice")).isNotNull();
+    }
+
+
+
+    @Test(priority = 6, dependsOnMethods = {"CreateBooking","Token_Create"})
+    @Owner("Mayank Paliwal")
+    @Description("TC#6 Delete booking by Id")
+    public void delete_user() {
+
+        r = RestAssured.given()
+                .baseUri(uri)
+                .basePath("/booking/"+bookingid)
+                .contentType(ContentType.JSON)
+                .cookie("token",token);
+
+        response = r.when().log().all().delete();
+
+        vr = response.then().log().all();
+        vr.statusCode(201);
+
+
+    }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
